@@ -19,6 +19,7 @@ namespace WordAddIn
         private Word.Range _LastRange = null;
         private Word.WdColorIndex _LastRangeBackColor = default(Word.WdColorIndex);
 
+
         public UserControl1()
         {
             InitializeComponent();
@@ -151,5 +152,7 @@ namespace WordAddIn
             r.Text = this.textBox1.Text;
             
         }
+
+       
     }
 }

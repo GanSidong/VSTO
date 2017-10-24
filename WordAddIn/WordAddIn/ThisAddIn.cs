@@ -9,6 +9,7 @@ using Microsoft.Office.Tools.Word;
 using Microsoft.Office.Tools;
 using System.Windows.Forms;
 using System.Drawing;
+using Microsoft.Office.Interop.Word;
 
 namespace WordAddIn
 {
@@ -22,12 +23,35 @@ namespace WordAddIn
         {
             initView();
         }
+        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+        {
+            try
+            {
+                RemoveRightBtns();
+                this.Application.WindowBeforeRightClick -= new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeAddBtnClick);
+            }
+            catch { }
+        }
         private void initView()
+        {
+
+            initToolPanel();
+            initRightBtn();
+            
+        }
+        /// <summary>初始化工具面板
+        /// </summary>
+        private void initToolPanel()
         {
             UserControl1 taskPane = new UserControl1();
             _MyCustomTaskPane = this.CustomTaskPanes.Add(taskPane, "My Task Pane");
-            _MyCustomTaskPane.Width = 200;
+            _MyCustomTaskPane.Width = 235;
             _MyCustomTaskPane.Visible = true;
+        }
+        /// <summary> 初始化右键菜单
+        /// </summary>
+        private void initRightBtn()
+        {
             RemoveRightBtns();
             Office.CommandBarControls siteBtns = Application.CommandBars.FindControls(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
             if (siteBtns != null)
@@ -35,40 +59,33 @@ namespace WordAddIn
                 foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
                 {
                     //如果已经存在就删除
-                    if (temp_contrl.Tag == "BookMarkAddin")
+                    if (temp_contrl.Tag == "BookMarkAddin" || temp_contrl.Tag == "checkOutline")
                     {
                         temp_contrl.Delete();
                     }
                 }
             }
-            
+
             // 添加右键按钮
             Office.CommandBarButton addBtn = (Office.CommandBarButton)Application.CommandBars["Text"].Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, false);
             addBtn.BeginGroup = true;
             addBtn.Tag = "BookMarkAddin";
-            addBtn.Caption = "添加背景色";
-            addBtn.Enabled = false;
-            this.Application.WindowBeforeRightClick += new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeRightClick);
-            this.Application.WindowSelectionChange += new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(Application_WindowSelectionChange);
+            addBtn.Caption = "查看概要";
+            addBtn.Enabled = true;
+            this.Application.WindowBeforeRightClick += new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeAddBtnClick);
+
+            //// 添加右键按钮
+            //Office.CommandBarButton checkBtn = (Office.CommandBarButton)Application.CommandBars["Text"].Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, false);
+            //checkBtn.BeginGroup = true;
+            //checkBtn.Tag = "checkOutline";
+            //checkBtn.Caption = "查看概要";
+            //checkBtn.Enabled = true;
+            //checkBtn.Click += checkBtn_Click;
+           
         }
-
-        private void Application_WindowSelectionChange(Word.Selection Sel)
+        private void Application_WindowBeforeAddBtnClick(Word.Selection Sel, ref bool Cancel)
         {
-            MyBookMark bookmark = _BookMarkList.FirstOrDefault(mark => Sel.Range.Start >= mark.BookMarkRange.Start && Sel.Range.Start <= mark.BookMarkRange.End);
-            if (bookmark != null)
-            {
-                Globals.ThisAddIn._FloatingPanel = new FloatingPanel(bookmark);
-
-                Point currentPos = GetPositionForShowing(Sel);
-
-                Globals.ThisAddIn._FloatingPanel.Location = currentPos;
-                Globals.ThisAddIn._FloatingPanel.Show();
-            }
-        }
-
-        private void Application_WindowBeforeRightClick(Word.Selection Sel, ref bool Cancel)
-        {
-            // 我这里没有通过全局变量来控制右键菜单里面的按钮，而是通过findcontrol来取得按钮
+            //这里没有通过全局变量来控制右键菜单里面的按钮，而是通过findcontrol来取得按钮
             //因为这里的VSTO和COM对象处理有问题，使用全局变量来控制右键按钮不稳定
             Office.CommandBarButton addBtn = (Office.CommandBarButton)Application.CommandBars.FindControl(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
             addBtn.Enabled = false;
@@ -85,13 +102,17 @@ namespace WordAddIn
 
         private void _RightBtn_Click(Office.CommandBarButton Ctrl, ref bool CancelDefault)
         {
-            Point currentPos = GetPositionForShowing(this.Application.Selection);
-            AddBookMarkForm form = new AddBookMarkForm(this.Application.Selection.Range);
-            form.Location = currentPos;
-
-            form.ShowDialog();
+            //System.Drawing.Point currentPos = GetPositionForShowing(this.Application.Selection);
+            //AddBookMarkForm form = new AddBookMarkForm(this.Application.Selection.Range);
+            //form.Location = currentPos;
+            //form.ShowDialog();
+            (_MyCustomTaskPane.Control as UserControl1).textBox2.Text = "ddddd";
+            //UserControl1 uc = new UserControl1();
+            //var a = _MyCustomTaskPane.Control;
+            //uc.textBox2.Text = "dsdfsdf";
+            //this.CustomTaskPanes.Count
         }
-        private static Point GetPositionForShowing(Word.Selection Sel)
+        private static System.Drawing.Point GetPositionForShowing(Word.Selection Sel)
         {
             int left = 0;
             int top = 0;
@@ -99,7 +120,7 @@ namespace WordAddIn
             int height = 0;
             Globals.ThisAddIn.Application.ActiveDocument.ActiveWindow.GetPoint(out left, out top, out width, out height, Sel.Range);
 
-            Point currentPos = new Point(left, top);
+            System.Drawing.Point currentPos = new System.Drawing.Point(left, top);
             if (Screen.PrimaryScreen.Bounds.Height - top > 340)
             {
                 currentPos.Y += 20;
@@ -110,18 +131,6 @@ namespace WordAddIn
             }
             return currentPos;
         }
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
-        {
-            try
-            {
-                RemoveRightBtns();
-
-                this.Application.WindowBeforeRightClick -= new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeRightClick);
-                this.Application.WindowSelectionChange -= new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(Application_WindowSelectionChange);
-            }
-            catch { }
-        }
-
         private void RemoveRightBtns()
         {
             Office.CommandBarControls siteBtns = Application.CommandBars.FindControls(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
@@ -132,7 +141,7 @@ namespace WordAddIn
             foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
             {
                 //如果已经存在就删除
-                if (temp_contrl.Tag == "BookMarkAddin")
+                if (temp_contrl.Tag == "BookMarkAddin" ||temp_contrl.Tag == "checkOutline")
                 {
                     temp_contrl.Delete();
                 }
