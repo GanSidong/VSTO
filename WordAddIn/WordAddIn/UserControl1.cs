@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Word;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
-using System.Text.RegularExpressions;
-using Microsoft.Office.Interop.Word;
 
 namespace WordAddIn
 {
@@ -149,8 +151,45 @@ namespace WordAddIn
         {
             Selection selection = Globals.ThisAddIn.Application.Selection; ;
             Word.Range r = selection.Range;
-            r.Text = this.textBox1.Text;
+            r.Text = this.textBox1.Text;       
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Filter = "txt文件(*.txt)|*.txt;|所有文件|*.*";
+            fd.ValidateNames = true;
+            fd.CheckPathExists = true;
+            fd.CheckFileExists = true;
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                string strFileName = fd.FileName;
+                string path = System.IO.Path.GetDirectoryName(strFileName);
+                string path1 = System.IO.Path.GetExtension(strFileName);//文件扩展名
+                string path2 = System.IO.Path.GetFileNameWithoutExtension(strFileName);//文件名没有扩展名
+                string path3 = System.IO.Path.GetFileName(strFileName);//得到文件
+                string path4 = System.IO.Path.GetFullPath(strFileName);  
+                String line;
+                StreamReader sr = new StreamReader(strFileName, Encoding.Default);
+                List<string> strList = new List<string>();
+                while ((line = sr.ReadLine()) != null)
+                {
+                    strList.Add(line);                   
+                }
+                
+                for(int i = strList.Count-1;i >= 0;i--)
+                {
+                    Selection selection = Globals.ThisAddIn.Application.Selection;
+                    Word.Range r = selection.Range;
+                    r.Text = strList[i] + Environment.NewLine;
+                }                   
+            }
             
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
 
        
