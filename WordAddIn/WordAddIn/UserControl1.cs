@@ -151,7 +151,7 @@ namespace WordAddIn
         {
             Selection selection = Globals.ThisAddIn.Application.Selection; ;
             Word.Range r = selection.Range;
-            r.Text = this.textBox1.Text;       
+            r.Text = this.textBox1.Text;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -164,34 +164,41 @@ namespace WordAddIn
             if (fd.ShowDialog() == DialogResult.OK)
             {
                 string strFileName = fd.FileName;
-                string path = System.IO.Path.GetDirectoryName(strFileName);
-                string path1 = System.IO.Path.GetExtension(strFileName);//文件扩展名
-                string path2 = System.IO.Path.GetFileNameWithoutExtension(strFileName);//文件名没有扩展名
-                string path3 = System.IO.Path.GetFileName(strFileName);//得到文件
-                string path4 = System.IO.Path.GetFullPath(strFileName);  
                 String line;
                 StreamReader sr = new StreamReader(strFileName, Encoding.Default);
                 List<string> strList = new List<string>();
                 while ((line = sr.ReadLine()) != null)
                 {
-                    strList.Add(line);                   
+                    strList.Add(line);
                 }
-                
-                for(int i = strList.Count-1;i >= 0;i--)
+
+                for (int i = strList.Count - 1; i >= 0; i--)
                 {
                     Selection selection = Globals.ThisAddIn.Application.Selection;
                     Word.Range r = selection.Range;
                     r.Text = strList[i] + Environment.NewLine;
-                }                   
+                }
+
             }
-            
+
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog sf = new SaveFileDialog();
+            sf.Filter = "txt文件(*.txt)|*.txt;|所有文件|*.*";
+            sf.RestoreDirectory = true;
+            Word.Range range = Globals.ThisAddIn.Application.Selection.Range;
+            StreamWriter myStream;
+            if (sf.ShowDialog() == DialogResult.OK)
+            {
+                string str;
+                str = sf.FileName;
+                myStream = new StreamWriter(sf.FileName);
+                myStream.Write(range.Text);
+                myStream.Flush();
+                myStream.Close();
+            }
         }
-
-       
     }
 }

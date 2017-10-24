@@ -107,10 +107,7 @@ namespace WordAddIn
             //form.Location = currentPos;
             //form.ShowDialog();
             (_MyCustomTaskPane.Control as UserControl1).textBox2.Text = "ddddd";
-            //UserControl1 uc = new UserControl1();
-            //var a = _MyCustomTaskPane.Control;
-            //uc.textBox2.Text = "dsdfsdf";
-            //this.CustomTaskPanes.Count
+
         }
         private static System.Drawing.Point GetPositionForShowing(Word.Selection Sel)
         {
