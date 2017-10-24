@@ -24,23 +24,29 @@ namespace WordAddIn
         }
         private void initView()
         {
+            UserControl1 taskPane = new UserControl1();
+            _MyCustomTaskPane = this.CustomTaskPanes.Add(taskPane, "My Task Pane");
+            _MyCustomTaskPane.Width = 200;
+            _MyCustomTaskPane.Visible = true;
             RemoveRightBtns();
             Office.CommandBarControls siteBtns = Application.CommandBars.FindControls(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
-            foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
+            if (siteBtns != null)
             {
-                //如果已经存在就删除
-                if (temp_contrl.Tag == "BookMarkAddin")
+                foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
                 {
-                    temp_contrl.Delete();
+                    //如果已经存在就删除
+                    if (temp_contrl.Tag == "BookMarkAddin")
+                    {
+                        temp_contrl.Delete();
+                    }
                 }
             }
+            
             // 添加右键按钮
             Office.CommandBarButton addBtn = (Office.CommandBarButton)Application.CommandBars["Text"].Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, false);
             addBtn.BeginGroup = true;
             addBtn.Tag = "BookMarkAddin";
-
             addBtn.Caption = "添加背景色";
-
             addBtn.Enabled = false;
             this.Application.WindowBeforeRightClick += new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeRightClick);
             this.Application.WindowSelectionChange += new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(Application_WindowSelectionChange);

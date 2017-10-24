@@ -21,18 +21,18 @@ namespace WordAddIn
 
         private void button2_Click(object sender, RibbonControlEventArgs e)
         {
-            //if (Globals.ThisAddIn._MyCustomTaskPane != null)
-            //{
+            if (Globals.ThisAddIn._MyCustomTaskPane != null)
+            {
                 Globals.ThisAddIn._MyCustomTaskPane.Visible = true;
-            //}
+            }
         }
 
         private void button3_Click(object sender, RibbonControlEventArgs e)
         {
-            //if (Globals.ThisAddIn._MyCustomTaskPane != null)
-            //{
+            if (Globals.ThisAddIn._MyCustomTaskPane != null)
+            {
                 Globals.ThisAddIn._MyCustomTaskPane.Visible = false;
-            //}
+            }
         }
     }
 }
