@@ -17,28 +17,30 @@ namespace WordAddIn
         public CustomTaskPane _MyCustomTaskPane = null;
         public List<MyBookMark> _BookMarkList = new List<MyBookMark>();
         public FloatingPanel _FloatingPanel = null;
-        private Office.CommandBarButton addBtn = null;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            initView();   
+            initView();
         }
         private void initView()
         {
             RemoveRightBtns();
-            UserControl1 taskPane = new UserControl1();
-            _MyCustomTaskPane = this.CustomTaskPanes.Add(taskPane, "My Task Pane");
-            _MyCustomTaskPane.Width = 200;
-            _MyCustomTaskPane.Visible = true;
-            
-            addBtn = (Office.CommandBarButton)Application.CommandBars["Text"].Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, false);
-
-            // 开始一个新Group，即在我们添加的Menu前加一条分割线   
+            Office.CommandBarControls siteBtns = Application.CommandBars.FindControls(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
+            foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
+            {
+                //如果已经存在就删除
+                if (temp_contrl.Tag == "BookMarkAddin")
+                {
+                    temp_contrl.Delete();
+                }
+            }
+            // 添加右键按钮
+            Office.CommandBarButton addBtn = (Office.CommandBarButton)Application.CommandBars["Text"].Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, false);
             addBtn.BeginGroup = true;
-            // 为按钮设置Tag
             addBtn.Tag = "BookMarkAddin";
-            // 添加按钮上的文字
-            addBtn.Caption = "Add Bookmark";
-            // 将按钮初始设为不激活状态
+
+            addBtn.Caption = "添加背景色";
+
             addBtn.Enabled = false;
             this.Application.WindowBeforeRightClick += new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(Application_WindowBeforeRightClick);
             this.Application.WindowSelectionChange += new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(Application_WindowSelectionChange);
@@ -60,9 +62,9 @@ namespace WordAddIn
 
         private void Application_WindowBeforeRightClick(Word.Selection Sel, ref bool Cancel)
         {
-            // 根据之前添加的Tag来找到我们添加的右键菜单
-            // 注意：我这里没有通过全局变量来控制右键菜单，而是通过findcontrol来取得按钮，因为这里的VSTO和COM对象处理有问题，使用全局变量来控制右键按钮不稳定
-           
+            // 我这里没有通过全局变量来控制右键菜单里面的按钮，而是通过findcontrol来取得按钮
+            //因为这里的VSTO和COM对象处理有问题，使用全局变量来控制右键按钮不稳定
+            Office.CommandBarButton addBtn = (Office.CommandBarButton)Application.CommandBars.FindControl(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
             addBtn.Enabled = false;
             addBtn.Click -= new Office._CommandBarButtonEvents_ClickEventHandler(_RightBtn_Click);
 
@@ -117,18 +119,18 @@ namespace WordAddIn
         private void RemoveRightBtns()
         {
             Office.CommandBarControls siteBtns = Application.CommandBars.FindControls(Office.MsoControlType.msoControlButton, missing, "BookMarkAddin", false);
-            if (siteBtns != null)
+            if (siteBtns ==null)
             {
-                foreach (Office.CommandBarControl btn in siteBtns)
+                return;
+            }
+            foreach (Microsoft.Office.Core.CommandBarControl temp_contrl in siteBtns)
+            {
+                //如果已经存在就删除
+                if (temp_contrl.Tag == "BookMarkAddin")
                 {
-                    btn.Delete(true);
+                    temp_contrl.Delete();
                 }
             }
-            if (addBtn != null)
-            {
-                addBtn.Delete(true);
-            }
-
         }
 
         #region VSTO 生成的代码
