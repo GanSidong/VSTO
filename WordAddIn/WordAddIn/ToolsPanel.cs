@@ -9,14 +9,14 @@ using Word = Microsoft.Office.Interop.Word;
 
 namespace WordAddIn
 {
-    public partial class UserControl1 : UserControl
+    public partial class ToolsPanel : UserControl
     {
         // 保存修改过的Range和之前的背景色，以便于恢复
         private Word.Range _LastRange = null;
         private Word.WdColorIndex _LastRangeBackColor = default(Word.WdColorIndex);
 
 
-        public UserControl1()
+        public ToolsPanel()
         {
             InitializeComponent();
         }

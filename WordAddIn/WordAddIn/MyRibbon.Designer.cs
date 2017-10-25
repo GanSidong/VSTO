@@ -1,13 +1,13 @@
 ﻿namespace WordAddIn
 {
-    partial class Ribbon : Microsoft.Office.Tools.Ribbon.RibbonBase
+    public partial class MyRibbon : Microsoft.Office.Tools.Ribbon.RibbonBase
     {
         /// <summary>
         /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        public Ribbon()
+        public MyRibbon()
             : base(Globals.Factory.GetRibbonFactory())
         {
             InitializeComponent();
@@ -38,6 +38,7 @@
             this.group1 = this.Factory.CreateRibbonGroup();
             this.button2 = this.Factory.CreateRibbonButton();
             this.button3 = this.Factory.CreateRibbonButton();
+            this.tgbMy = this.Factory.CreateRibbonToggleButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             // 
@@ -51,8 +52,9 @@
             // 
             this.group1.Items.Add(this.button2);
             this.group1.Items.Add(this.button3);
-            this.group1.Label = "group1";
-            this.group1.Name = "group1";
+            this.group1.Items.Add(this.tgbMy);
+            this.group1.Label = "";
+            this.group1.Name = "";
             // 
             // button2
             // 
@@ -65,6 +67,12 @@
             this.button3.Label = "收起";
             this.button3.Name = "button3";
             this.button3.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button3_Click);
+            // 
+            // tgbMy
+            // 
+            this.tgbMy.Label = "展开";
+            this.tgbMy.Name = "tgbMy";
+            this.tgbMy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tgbMy_Click);
             // 
             // Ribbon
             // 
@@ -85,13 +93,14 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button3;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tgbMy;
     }
 
     partial class ThisRibbonCollection
     {
-        internal Ribbon Ribbon
+        internal MyRibbon Ribbon
         {
-            get { return this.GetRibbon<Ribbon>(); }
+            get { return this.GetRibbon<MyRibbon>(); }
         }
     }
 }

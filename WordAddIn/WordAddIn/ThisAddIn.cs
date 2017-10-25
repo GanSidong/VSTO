@@ -10,6 +10,8 @@ using Microsoft.Office.Tools;
 using System.Windows.Forms;
 using System.Drawing;
 using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Tools.Ribbon;
+
 
 namespace WordAddIn
 {
@@ -22,6 +24,7 @@ namespace WordAddIn
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             initView();
+            
         }
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
@@ -38,15 +41,40 @@ namespace WordAddIn
             initToolPanel();
             initRightBtn();
             
+            
         }
+
+        void Application_WindowActivate(Word.Document Doc, Window Wn)
+        {
+            CustomTaskPane ctp = MyPaneManager.Instance.GetMyPane();
+            
+            MyRibbon rm = Globals.Ribbons.GetRibbon<MyRibbon>() as MyRibbon;
+
+            ctp.Visible = rm.tgbMy.Checked;
+
+
+        }
+
+        private void DocumentChange()
+        {
+            MyPaneManager.Instance.CollectMyPanes();
+        }
+
         /// <summary>初始化工具面板
         /// </summary>
         private void initToolPanel()
-        {
-            UserControl1 taskPane = new UserControl1();
-            _MyCustomTaskPane = this.CustomTaskPanes.Add(taskPane, "My Task Pane");
+        {  
+            ToolsPanel taskPane = new ToolsPanel();
+            //_MyCustomTaskPane = this.CustomTaskPanes.Add(taskPane, "我的工具");
+           
+            MyPaneManager mm = MyPaneManager.Instance;
+
+            _MyCustomTaskPane = mm.GetMyPane();
+
+
             _MyCustomTaskPane.Width = 235;
             _MyCustomTaskPane.Visible = true;
+
         }
         /// <summary> 初始化右键菜单
         /// </summary>
@@ -106,7 +134,7 @@ namespace WordAddIn
             //AddBookMarkForm form = new AddBookMarkForm(this.Application.Selection.Range);
             //form.Location = currentPos;
             //form.ShowDialog();
-            (_MyCustomTaskPane.Control as UserControl1).textBox2.Text = "ddddd";
+            (_MyCustomTaskPane.Control as ToolsPanel).textBox2.Text = "ddddd";
 
         }
         private static System.Drawing.Point GetPositionForShowing(Word.Selection Sel)
@@ -155,8 +183,52 @@ namespace WordAddIn
         {
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+            this.Application.WindowActivate += Application_WindowActivate;
+            this.Application.DocumentChange += new Word.ApplicationEvents4_DocumentChangeEventHandler(DocumentChange);
         }
 
+        #endregion
+
+        #region MyPaneManager
+        public class MyPaneManager
+        {
+            private MyPaneManager()
+            {
+                m_MyPanes = Globals.ThisAddIn.CustomTaskPanes;
+            }
+            private static MyPaneManager m_Instance = new MyPaneManager();
+            public static MyPaneManager Instance
+            {
+                get
+                {
+                    return m_Instance;
+                }
+            }
+            
+            private CustomTaskPaneCollection m_MyPanes;
+            public CustomTaskPane GetMyPane()
+            {
+                Word.Window window = Globals.ThisAddIn.Application.ActiveWindow;
+                foreach (CustomTaskPane ctp in m_MyPanes)
+                {
+                    if (ctp.Title == "我的工具" && ctp.Window == window)
+                    {
+                        return ctp;
+                    }
+                }
+                return m_MyPanes.Add(new ToolsPanel(), "我的工具", window);
+            }
+            public void CollectMyPanes()
+            {
+                for (int i = m_MyPanes.Count - 1; i >= 0; i--)
+                {
+                    if (m_MyPanes[i].Window == null)
+                    {
+                        m_MyPanes.RemoveAt(i);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }
