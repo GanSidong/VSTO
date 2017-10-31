@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
+using Tools;
+using System.Xml;
 
 namespace WordAddIn
 {
@@ -193,6 +195,27 @@ namespace WordAddIn
                 myStream.Flush();
                 myStream.Close();
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            doc.Load(@"E:\Git\VSTO\WordAddIn\WordAddIn\XMLFile1.xml");
+            XmlNode xn = doc.SelectSingleNode("//interText");
+            this.textBox3.Text = xn.InnerText;
+           
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            XmlDocument doc = new XmlDocument();
+            
+            doc.Load(@"E:\Git\VSTO\WordAddIn\WordAddIn\XMLFile1.xml");
+            XmlNode xn = doc.SelectSingleNode("//interText");
+            //string transDate = xn.InnerText;
+            xn.InnerText = this.textBox3.Text;
+            doc.Save(@"E:\Git\VSTO\WordAddIn\WordAddIn\XMLFile1.xml"); 
         }
     }
 }

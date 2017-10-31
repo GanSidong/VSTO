@@ -119,6 +119,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -180,6 +181,10 @@
     <Compile Include="ToolsPanel.Designer.cs">
       <DependentUpon>ToolsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Data2Conversion.cs" />
+    <Compile Include="Tools\DataGridViewHelper.cs" />
+    <Compile Include="Tools\Macro.cs" />
+    <Compile Include="Tools\VerificationHelper.cs" />
     <EmbeddedResource Include="AddBookMarkForm.resx">
       <DependentUpon>AddBookMarkForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -187,7 +192,7 @@
       <DependentUpon>FloatingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -228,6 +233,9 @@
     </Compile>
     <AppDesigner Include="Properties\" />
     <None Include="WordAddIn_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="XMLFile1.xml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

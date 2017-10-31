@@ -15,29 +15,6 @@ namespace WordAddIn
 
         }
 
-        private void button1_Click(object sender, RibbonControlEventArgs e)
-        {
-            CustomTaskPane ctp = WordAddIn.ThisAddIn.MyPaneManager.Instance.GetMyPane();
-            ctp.VisibleChanged += MypanelsVisableChange;
-            ctp.Visible = this.tgbMy.Checked;
-        }
-
-        private void button2_Click(object sender, RibbonControlEventArgs e)
-        {
-            if (Globals.ThisAddIn._MyCustomTaskPane != null)
-            {
-                Globals.ThisAddIn._MyCustomTaskPane.Visible = true;
-            }
-        }
-
-        private void button3_Click(object sender, RibbonControlEventArgs e)
-        {
-            if (Globals.ThisAddIn._MyCustomTaskPane != null)
-            {
-                Globals.ThisAddIn._MyCustomTaskPane.Visible = false;
-            }
-        }
-
         private void MypanelsVisableChange(object sender,EventArgs e)
         {
             CustomTaskPane ctp = sender as CustomTaskPane;

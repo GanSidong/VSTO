@@ -22,7 +22,7 @@ namespace WordAddIn.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WordAddIn.Properties {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WordAddIn.Properties.Resources", typeof(Resources).Assembly);
@@ -51,12 +51,28 @@ namespace WordAddIn.Properties {
         ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;bookstore&gt;
+        ///  &lt;book Type=&quot;必修课&quot; ISBN=&quot;7-111-19149-2&quot;&gt;
+        ///    &lt;title&gt;数据结构&lt;/title&gt;
+        ///    &lt;author&gt;严蔚敏&lt;/author&gt;
+        ///    &lt;price&gt;30.00&lt;/price&gt;
+        ///  &lt;/book&gt;
+        ///&lt;/bookstore&gt; 的本地化字符串。
+        /// </summary>
+        public static string XMLFile1 {
+            get {
+                return ResourceManager.GetString("XMLFile1", resourceCulture);
             }
         }
     }

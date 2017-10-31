@@ -36,8 +36,6 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
-            this.button2 = this.Factory.CreateRibbonButton();
-            this.button3 = this.Factory.CreateRibbonButton();
             this.tgbMy = this.Factory.CreateRibbonToggleButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -50,23 +48,8 @@
             // 
             // group1
             // 
-            this.group1.Items.Add(this.button2);
-            this.group1.Items.Add(this.button3);
             this.group1.Items.Add(this.tgbMy);
-            this.group1.Label = "";
-            this.group1.Name = "";
-            // 
-            // button2
-            // 
-            this.button2.Label = "展开";
-            this.button2.Name = "button2";
-            this.button2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Label = "收起";
-            this.button3.Name = "button3";
-            this.button3.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button3_Click);
+            this.group1.Name = "group1";
             // 
             // tgbMy
             // 
@@ -74,9 +57,9 @@
             this.tgbMy.Name = "tgbMy";
             this.tgbMy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tgbMy_Click);
             // 
-            // Ribbon
+            // MyRibbon
             // 
-            this.Name = "Ribbon";
+            this.Name = "MyRibbon";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.tab1);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon_Load);
@@ -91,8 +74,6 @@
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button3;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tgbMy;
     }
 
